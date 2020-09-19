@@ -7,39 +7,40 @@ import Euterpea
 
 
 
-majorTriad :: Pitch -> Dur -> Music Pitch
-majorTriad p d =
+majorTriad :: Music Pitch -> Music Pitch
+majorTriad root =
    let
-       tonic = note d p 
-       third = transpose 4 tonic
-       fifth = transpose 7 tonic 
+       third = transpose 4 root
+       fifth = transpose 7 root 
    in 
-       tonic :=: third :=: fifth
+       root :=: third :=: fifth
 
-minorTriad :: Pitch -> Dur -> Music Pitch
-minorTriad p d =
+minorTriad :: Music Pitch -> Music Pitch
+minorTriad root =
    let
-       tonic = note d p 
-       third = transpose 3 tonic
-       fifth = transpose 7 tonic 
+       third = transpose 3 root
+       fifth = transpose 7 root 
    in 
-       tonic :=: third :=: fifth       
+       root :=: third :=: fifth       
 
--- twoFiveOne :: Pitch -> Dur -> Music Pitch
--- twoFiveOne p d =
---     let
---         tonic = note d p
---         second = transpose 2 tonic
---         fifth = transpose 7 tonic
---     in 
---         minorTriad second :+: majorTriad fifth :+: majorTriad tonic
+twoFiveOne :: Music Pitch -> Music Pitch
+twoFiveOne root =
+    let
+        second = transpose 2 root
+        fifth = transpose 7 root
+    in 
+        minorTriad second :+: majorTriad fifth :+: majorTriad root
+
+
+-- Test:
+-- playDev 2 $ twoFiveOne (f 3 hn)
 
 
 --- HELPER ---
 
 
 -- Maka a pitch 
-mp :: PitchClass -> Int ->  Pitch
-mp  pitchClass octave =
-    (pitchClass, octave)
+-- mp :: PitchClass -> Int ->  Pitch
+-- mp  pitchClass octave =
+--     (pitchClass, octave)
 
