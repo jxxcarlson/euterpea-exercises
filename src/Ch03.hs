@@ -173,3 +173,67 @@ chrom duration p1 p2 =
 -- > playDev 2 $ chrom (1/4) a220 a440
 
 
+
+
+--- EXERCISE 3.12 ---
+
+-- A scale is characterized by intervals.  For example, the
+-- major scale is defined by the intervals [2,2,1,2,2,2].
+-- Define a function
+--
+--     mkSkale :: Pitch -> [Int] -> Music Pitch
+--
+-- such that `mkScale p ints` is the scale beginning at
+-- pitch p hand having the interval structure ints.
+
+-- Given an initial pitch and a list of intervals,
+-- return a list of absolute pitches beginning
+-- with the given pitch and having the given
+-- interval structure
+--
+
+
+
+
+mkAbsoluteScalePitches :: Pitch -> [Int] -> [Int]
+mkAbsoluteScalePitches p ints = 
+    reverse $ 
+      foldl (\ns k -> head ns + k : ns) [absPitch p]  ints
+
+
+mkScalePitches :: Pitch -> [Int] -> [Pitch]
+mkScalePitches p ints = 
+    map pitch $ mkAbsoluteScalePitches p ints
+
+
+mkScale :: Pitch -> [Int] -> Music Pitch 
+mkScale p ints = line $ map (note (1/4)) $ mkScalePitches p ints 
+
+-- Examples:
+--
+-- > io = mkScale (makePitch C 4) [2,2,1,2,2,2,1]
+-- > p io
+--
+-- > dor = mkScale (makePitch C 4) [2,1,2,2,2,1,2]
+-- > p dor
+
+
+
+--- EXERCISE 3.13 ---
+
+
+data Mode_ = Ionian_ | Dorian_ | Phrygian_ | Lydian_ | Mixolydian_ | Aeolian_ | Locrian_
+
+genScale :: Mode_ -> Pitch -> Music Pitch 
+genScale mode p =
+    case mode of
+        Ionian_ -> mkScale p [2,2,1,2,2,2,1]
+        Dorian_ -> mkScale p [2,1,2,2,2,1,2]
+        Phrygian_ -> mkScale p [1,2,2,2,1,2,2]
+        Lydian_ -> mkScale p [2,2,2,1,2,2,1]
+        Mixolydian_ -> mkScale p [2,2,1,2,2,1,2]
+        Aeolian_ -> mkScale p [2,1,2,2,1,2,2]
+        Locrian_ -> mkScale p [1,2,2,1,2,2,2]
+
+-- Test:
+-- > playDev 3 $ genScale Phrygian_ (makePitch C 4)
