@@ -8,7 +8,11 @@ import Helper
 wts :: Pitch -> [Music Pitch]
 wts p = let f ap = note qn (pitch (absPitch p + ap))
       in map f [0, 2, 4, 6, 8]
-        
+
+wtchord :: Pitch -> [Music Pitch]
+wtchord  p =  let f ap = note qn (pitch (absPitch p + ap))
+      in map f [0, 4, 8]
+
 -- Example:
 -- > playDev 2 $ line $ wts a440
 
@@ -101,3 +105,24 @@ f3 ms = map staccato ms
 
 -- Test :
 -- > playDev 2 $ line $ f3 $ wts a440
+
+
+
+--- NOTES ON SECTION 3.6 ---
+
+
+-- Functions such as line and chord can 
+-- easily be impleented using fold.
+-- We join elments of a list with an
+-- operator and the help of a neutral
+-- element (Monoid!)
+
+line_ :: [Music a] -> Music a
+line_ = foldl (:+:) (rest 0)
+
+chord_ :: [Music a] -> Music a
+chord_ = foldl (:=:) (rest 0)
+
+-- Test:
+-- > playDev 2 $ line_ $ wts a440
+-- > playDev 2 $ chord_ $ wtchord a440
