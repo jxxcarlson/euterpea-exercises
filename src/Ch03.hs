@@ -126,3 +126,50 @@ chord_ = foldl (:=:) (rest 0)
 -- Test:
 -- > playDev 2 $ line_ $ wts a440
 -- > playDev 2 $ chord_ $ wtchord a440
+
+
+
+
+
+--- EXERCISE 3.9 ---
+
+-- Define a function
+
+--    fuse :: [Dur] -> [Dur -> Music a] -> [Music a]
+
+-- that combines a list of durations with a list of notes 
+-- lacking durations to create a list of notes, e.g,
+
+-- > fuse [qn, hn, sn] [c 4, d 4, e 4]
+--    [c 4 qn, d 4 hn, e 4 sn]
+
+fuse :: [Dur] -> [Dur -> Music a] -> [Music a]
+fuse durations notes = 
+    map (\(d, n) -> n d) $ zip durations notes
+
+
+
+
+--- EXERCISE 3.11 --- 
+
+-- Define a function !!
+--
+--     chrom :: Pitch -> Pitch -> Music Pitch
+--
+-- which constructs an ascending or descending chromatic
+-- scale passage from the first note to second.
+
+
+chrom :: Dur -> Pitch -> Pitch -> Music Pitch
+chrom duration p1 p2 =
+    let
+        a1 = absPitch p1
+        a2 = absPitch p2
+    in
+        line $ map (note duration . pitch) [a1..a2]
+
+
+-- Test:
+-- > playDev 2 $ chrom (1/4) a220 a440
+
+

@@ -9,4 +9,5 @@ makePitch :: PitchClass -> Int ->  Pitch
 makePitch  pitchClass octave =
     (pitchClass, octave)
 
+a220 = makePitch A 3
 a440 = makePitch A 4
