@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e720d1a119fb0f3002df28f9b3563698e02274a564a2799c4e4bc31532a39d75
+-- hash: ece7fd2d4e302fd7e07f236f8d8fc4f43eae32c5dd86cfeeb724932c3ccd3336
 
 name:           eutx
 version:        0.1.0.0
@@ -27,7 +27,8 @@ source-repository head
 
 library
   exposed-modules:
-      Experiments
+      Ch03
+      Helper
       Lib
   other-modules:
       Paths_eutx
