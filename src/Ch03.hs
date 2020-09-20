@@ -237,3 +237,29 @@ genScale mode p =
 
 -- Test:
 -- > playDev 3 $ genScale Phrygian_ (makePitch C 4)
+
+
+--- EXERCISE 3.14: Frère Jaques ---
+
+-- First phrase
+m1 = line $ fuse (take 4 $ repeat (1/4)) [c 4, d 4, e 4, c 4]
+m2 = line $ fuse [1/4, 1/4, 1/2] [e 4, f 4, g 4]
+p1 = m1 :+: m1 :+: m2 :+: m2
+
+m4 = line $ fuse [1/8, 1/8, 1/8, 1/8, 1/4, 1/4] [g 4, a 4, g 4, f 4, e 4, c 4]
+m5 = (line $ fuse [1/4, 1/4, 3/8] [c 4, g 3, c 4]) :+: rest (1/8)
+
+-- Second phrase
+p2 = m4 :+: m4 :+: m5 :+: m5
+
+-- Melody
+q = p1 :+: p2
+
+-- Shifted and transposed melodies with orchestration
+q1 = instrument Oboe $ q
+q2 = instrument Bassoon $ transpose (-12) $ (rest 2) :+: q
+q3 = instrument Clarinet $ transpose (12) $ (rest 4) :+: q
+q4 = instrument Bassoon $ transpose (-12) $ (rest 6) :+: q
+
+-- Contructing the round
+r = q1 :=: q2 :=: q3 :=: q4
