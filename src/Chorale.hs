@@ -70,21 +70,6 @@ bass = forever $ bassLine
 -- > 12060 `div` 4
 -- 3015
 
-
-
-
-
--- not uxed right now:
-rescale :: Dur -> Music Pitch -> Music Pitch
-rescale factor mp =
-    case mp of 
-        (Prim (Note d p)) -> Prim (Note (factor * d) p)
-        Prim (Rest d) -> Prim (Rest (factor * d))
-        m1 :+: m2 -> rescale factor m1 :+: rescale factor m2
-        m1 :=: m2 -> rescale factor m1 :=: rescale factor m2
-        Modify control m -> Modify control (rescale factor m)
-
-
 mlength :: Music Pitch -> Dur
 mlength mp =
     case mp of 
@@ -98,3 +83,16 @@ lcm_ :: [Int] -> Int
 lcm_ [] = 1
 lcm_ (x:[]) = x
 lcm_ (x:xs) = lcm x (lcm_ xs)
+
+
+-- not used right now:
+rescale :: Dur -> Music Pitch -> Music Pitch
+rescale factor mp =
+    case mp of 
+        (Prim (Note d p)) -> Prim (Note (factor * d) p)
+        Prim (Rest d) -> Prim (Rest (factor * d))
+        m1 :+: m2 -> rescale factor m1 :+: rescale factor m2
+        m1 :=: m2 -> rescale factor m1 :=: rescale factor m2
+        Modify control m -> Modify control (rescale factor m)
+
+
