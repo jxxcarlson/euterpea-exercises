@@ -4,36 +4,13 @@ import Euterpea
 
 
 -- The composition:
-chorale :: Music Pitch
-chorale =  instrument player bass :=: instrument player tenor 
-           :=: instrument player tenor2 :=: instrument player solo
+chorale :: InstrumentName -> Music Pitch
+chorale player =  instrument player $ bass :=: tenor :=: tenor2 :=: solo
 
+-- Example:
+-- > playDev 2 $ chorale Bassoon
 
 --- Its construction ---
-
-player :: InstrumentName
-player = Bassoon
-
-bassNote = d 1 
-bassNote' = ds 1
-bassNote'' = e 1
-bassNote''' = f 1
-bassLine = line $ [bassNote 6, rest 3, bassNote' 3, rest 3, bassNote'' 3 , rest 2, bassNote''' 4, rest 1 , bassNote 7, rest 4]
-
-tenorNote = a 1
-tenorNote' = c 2
-tenorNote'' = d 2
-tenorLine = line $ map (rescale (1/2)) [rest 2, tenorNote 8, rest 3, tenorNote' 4, tenorNote'' 5, rest 4]
-
-tenorLine2 = rest 7 :+: f 1 4 :+: c 2 4
-
-bigRest :: Music Pitch
-bigRest = rest 9
-
-soloMotifA = line $ [a 2 1, d 3 1, c 4 2, f 4 hn, rest 2]
-soloMotif = line $ [a 2 1, d 3 1, c 3 2, f 3 2, e 3 4, rest 2]
-soloMotif' = rest 9 :+: soloMotif :+: transpose 3 soloMotif
-soloLine = soloMotif' :+: transpose 7 soloMotif' :+: rest 1
 
 solo :: Music Pitch
 solo = forever $ soloLine
@@ -46,6 +23,31 @@ tenor2 = forever $ tenorLine2
 
 bass :: Music Pitch
 bass = forever $ bassLine
+
+bassNote = d 1 
+bassNote' = ds 1
+bassNote'' = e 1
+bassNote''' = f 1
+bassLine = line $ [bassNote 6, rest 3, bassNote' 3, rest 3, bassNote'' 3 
+                    , rest 2, bassNote''' 4, rest 1 , bassNote 7, rest 4]
+
+tenorNote = a 1
+tenorNote' = c 2
+tenorNote'' = d 2
+tenorLine = line $ map (rescale (1/2)) [rest 2, tenorNote 8, rest 3
+                  , tenorNote' 4, tenorNote'' 5, rest 4]
+
+tenorLine2 = rest 7 :+: f 1 4 :+: c 2 4
+
+bigRest :: Music Pitch
+bigRest = rest 9
+
+soloMotifA = line $ [a 2 1, d 3 1, c 4 2, f 4 hn, rest 2]
+soloMotif = line $ [a 2 1, d 3 1, c 3 2, f 3 2, e 3 4, rest 2]
+soloMotif' = rest 9 :+: soloMotif :+: transpose 3 soloMotif
+soloLine = soloMotif' :+: transpose 7 soloMotif' :+: rest 1
+
+
 
 -- NOTE:
 --
