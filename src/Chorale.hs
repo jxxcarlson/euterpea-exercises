@@ -1,7 +1,7 @@
 module Chorale where
 
 import Euterpea
-import Helper
+
 
 
 -- The composition:
