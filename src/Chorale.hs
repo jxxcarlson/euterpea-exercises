@@ -1,3 +1,15 @@
+-- An infinite minimalistic chorale in four parts written in Haskell
+-- using the Euterpea library.  We also compute the cycle length
+-- for the music.
+
+-- The cycle length of the chorale is 3015 measures, as computed below.  This
+-- could easily be made much longer by adding rests so as to make the
+-- numbers in the list of individual cycle lengths for
+-- bass, tenor, tenor2 and solo (36, 15,12, 67) relatively prime.  For
+-- example, the least common multiple of 37, 15, 13, 67 is 483405,
+-- so the cycle length is 483405 beats, or 120851.25 4/4 measures.
+
+
 module Chorale where
 
 import Euterpea
@@ -24,6 +36,34 @@ tenor2 = forever $ tenorLine2
 bass :: Music Pitch
 bass = forever $ bassLine
 
+lSolo = ilength soloLine
+lTenor = ilength tenorLine
+lTenor2 = ilength tenorLine2
+lBass = ilength bassLine
+
+cycleLength = lcm_ [lSolo, lTenor, lTenor2, lBass]
+nSolo = cycleLength `div` lSolo
+nTenor = cycleLength `div` lTenor
+nTenor2 = cycleLength `div` lTenor2
+nBass = cycleLength `div` lBass
+
+-- Repeat music m n times
+mrepeat :: Int -> Music a -> Music a
+mrepeat 0 m = rest 0
+mrepeat n m = m :+: mrepeat (n - 1) m
+
+soloLine', tenorLine', tenorLine2', bassLine' :: Music Pitch
+soloLine' = mrepeat nSolo soloLine 
+tenorLine' = mrepeat nTenor tenorLine
+tenorLine2' = mrepeat nTenor2 tenorLine2
+bassLine' = mrepeat nBass bassLine
+
+-- Verify:
+-- > map ilength [bassLine', tenorLine', tenorLine2', soloLine']
+--   [156780,156780,156780,156780]
+
+chorale' = bassLine' :=: tenorLine' :=: tenorLine2' :=: soloLine'
+
 bassNote = d 1 
 bassNote' = ds 1
 bassNote'' = e 1
@@ -49,15 +89,7 @@ soloLine = soloMotif' :+: transpose 7 soloMotif' :+: rest 1
 
 
 
--- NOTE:
---
--- The cycle length of the chorale is 3015 measures,
--- as computed below.  This could easily be made
--- much longer by adding rests so as to make the
--- numbers in the list [67, 12, 15, 36] relatively
--- prime.  For example, lcm_ [67, 13, 15, 37] =
--- 483405, so the cycle length is 483405 beats,
--- or 120851.25 4/4 measures.
+-- COMPUTATION OF THE CYCLE LENGTH
 --
 -- > mlength soloLine
 -- 67 % 1
@@ -80,6 +112,9 @@ mlength mp =
         m1 :+: m2 -> mlength m1 + mlength m2
         m1 :=: m2 -> maximum [mlength m1, mlength m2]
         Modify control m -> mlength m
+
+ilength :: Music Pitch -> Int 
+ilength mp = round $ mlength mp
 
 lcm_ :: [Int] -> Int
 lcm_ [] = 1
