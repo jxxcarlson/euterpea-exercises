@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a4a62d5a1050065d980bf032e9205af1383010ec42e52fc446c833bb5fd12092
+-- hash: 0eca68a4f1b66cfe357d1d5888190f29aa3e7ab6f43be3ed90fda117bb8e8cd2
 
 name:           eutx
 version:        0.1.0.0
@@ -27,7 +27,7 @@ source-repository head
 
 library
   exposed-modules:
-      Composition01
+      Chorale
       Helper
       Lib
   other-modules:

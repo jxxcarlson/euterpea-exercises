@@ -3,14 +3,13 @@ module Chorale where
 import Euterpea
 
 
-
 -- The composition:
 chorale :: Music Pitch
 chorale =  instrument player bass :=: instrument player tenor 
            :=: instrument player tenor2 :=: instrument player solo
 
 
---- Its consturction ---
+--- Its construction ---
 
 player :: InstrumentName
 player = Bassoon
