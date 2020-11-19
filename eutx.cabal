@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0eca68a4f1b66cfe357d1d5888190f29aa3e7ab6f43be3ed90fda117bb8e8cd2
+-- hash: 39816e65b3dcc8b92a8760ddfc1beee9c4f134e5bf7a16e5428ff47aec2f3148
 
 name:           eutx
 version:        0.1.0.0
@@ -28,8 +28,9 @@ source-repository head
 library
   exposed-modules:
       Chorale
-      Helper
       Lib
+      NervousChase
+      SpaceInvasion
   other-modules:
       Paths_eutx
   hs-source-dirs:
@@ -37,6 +38,7 @@ library
   build-depends:
       Euterpea
     , base >=4.7 && <5
+    , random < 1.2.0
   default-language: Haskell2010
 
 executable eutx-exe

@@ -17,6 +17,7 @@
 module Chorale where
 
 import Euterpea
+import Lib
 
 
 -- The composition:
@@ -69,10 +70,6 @@ nTenor = cycleLength `div` lTenor
 nTenor2 = cycleLength `div` lTenor2
 nBass = cycleLength `div` lBass
 
--- Repeat the music m n times
-mrepeat :: Int -> Music a -> Music a
-mrepeat 0 m = rest 0
-mrepeat n m = m :+: mrepeat (n - 1) m
 
 -- Construct one cycle of the chorale
 soloLine', tenorLine', tenorLine2', bassLine' :: Music Pitch
@@ -109,39 +106,4 @@ soloMotifA = line $ [a 2 1, d 3 1, c 4 2, f 4 hn, rest 2]
 soloMotif = line $ [a 2 1, d 3 1, c 3 2, f 3 2, e 3 4, rest 2]
 soloMotif' = rest 9 :+: soloMotif :+: transpose 3 soloMotif
 soloLine = soloMotif' :+: transpose 7 soloMotif' :+: rest 1
-
-
--- Compute the length of a melody in beats
-mlength :: Music Pitch -> Dur
-mlength mp =
-    case mp of 
-        (Prim (Note d p)) -> d
-        Prim (Rest d) -> d
-        m1 :+: m2 -> mlength m1 + mlength m2
-        m1 :=: m2 -> maximum [mlength m1, mlength m2]
-        Modify control m -> mlength m
-
--- Compute the length of a melody in beats, but convert
--- to an integer.  Oops, we loose fractional beats,
--- if there are any.
-ilength :: Music Pitch -> Int 
-ilength mp = round $ mlength mp
-
--- Least common multiple of a list of integers.
-lcm_ :: [Int] -> Int
-lcm_ [] = 1
-lcm_ (x:[]) = x
-lcm_ (x:xs) = lcm x (lcm_ xs)
-
-
--- not used right now:
-rescale :: Dur -> Music Pitch -> Music Pitch
-rescale factor mp =
-    case mp of 
-        (Prim (Note d p)) -> Prim (Note (factor * d) p)
-        Prim (Rest d) -> Prim (Rest (factor * d))
-        m1 :+: m2 -> rescale factor m1 :+: rescale factor m2
-        m1 :=: m2 -> rescale factor m1 :=: rescale factor m2
-        Modify control m -> Modify control (rescale factor m)
-
 

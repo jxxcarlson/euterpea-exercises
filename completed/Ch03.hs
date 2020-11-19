@@ -1,7 +1,7 @@
 module Ch03 where
 
 import Euterpea
-import Helper
+-- import Helper
 
 -- WHOLE TONE SCALE --
 
