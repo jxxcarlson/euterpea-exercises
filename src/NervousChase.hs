@@ -81,17 +81,11 @@ l1Music :: Int -> AbsPitch -> Dur -> Music Pitch
 l1Music n ap dur = 
     (instrument Oboe $ phrase [Art (Staccato 0.9)] $ lMusic n ap dur) :=: (instrument Bassoon $ lMusic n (ap - 17) (2*dur))
 
+nervousChase :: Int -> AbsPitch -> Dur -> Music Pitch
+nervousChase n ap dur = 
+      cre 0.4 $ (instrument Xylophone $ phrase [Dyn (Loudness 70)] $ rest 2 :+: lMusic n (ap + 7) (dur))
+      :=: (cre 0.4 $ (dim 0.2 $ instrument Bassoon $ phrase [Dyn (Loudness 70), Art (Staccato 0.7)] $ lMusic n ap (dur)))
 
-l2Music :: Int -> AbsPitch -> Dur -> Music Pitch
-l2Music n ap dur = 
-      (instrument Xylophone $ phrase [Dyn (Loudness 70)] $ rest 2 :+: lMusic n (ap + 7) (dur))
-      :=: (dim 0.2 $ instrument Bassoon $ phrase [Dyn (Loudness 70), Art (Staccato 0.7)] $ lMusic n ap (dur))
-
-
-rit r = Modify (Phrase [Tmp $ Ritardando r])
-acc a = Modify (Phrase [Tmp $ Accelerando a])
-dim d = Modify (Phrase [Dyn $ Diminuendo d])
-cre c = Modify (Phrase [Dyn $ Crescendo c])
 
 playL :: Int -> Int -> AbsPitch -> Dur -> IO ()
 playL outputId n ap dur = 

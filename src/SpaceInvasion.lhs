@@ -8,6 +8,7 @@ Example: playDev 6 $ spaceInvasion 77, where 77 is a seed for the random number 
 > module SpaceInvasion where
 > import Euterpea
 > import System.Random
+> import Lib
 
 
 
@@ -94,13 +95,6 @@ Genrerate music from brown noise:
 >         vols = randIntsRange (60,120) (seed + 1)
 >     in  line $ map (note sn) $ zip pitches vols
 
-
-From [DQ], functions to modify the performance:
-
-> rit r = Modify (Phrase [Tmp $ Ritardando r])
-> acc a = Modify (Phrase [Tmp $ Accelerando a])
-> dim d = Modify (Phrase [Dyn $ Diminuendo d])
-> cre c = Modify (Phrase [Dyn $ Crescendo c])
 
 The piece:
 

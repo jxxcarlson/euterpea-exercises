@@ -48,3 +48,9 @@ rescale factor mp =
 
 perfTime :: Rational -> Music a -> Rational
 perfTime metronome x = dur x * (metronome / 60)
+
+
+rit r = Modify (Phrase [Tmp $ Ritardando r])
+acc a = Modify (Phrase [Tmp $ Accelerando a])
+dim d = Modify (Phrase [Dyn $ Diminuendo d])
+cre c = Modify (Phrase [Dyn $ Crescendo c])
