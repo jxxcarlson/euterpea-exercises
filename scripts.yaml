@@ -1,0 +1,5 @@
+
+scripts:
+
+  tree: tree -L 2 
+

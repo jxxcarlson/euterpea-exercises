@@ -1,9 +1,9 @@
 Space Invasion: An Exercise in 3-Part Aleatory Composition.
 
 *James Carlson*
-
 *November 18, 2020*
 
+Example: playDev 6 $ spaceInvasion 77, where 77 is a seed for the random number generator
 
 > module SpaceInvasion where
 > import Euterpea

@@ -16,7 +16,7 @@ wtchord  p =  let f ap = note qn (pitch (absPitch p + ap))
 -- Example:
 -- > playDev 2 $ line $ wts a440
 
--- Recall that line turns a list of Music a values
+-- Recall that line turns a list of Music a values 
 -- into a Music a value:
 --
 -- > :t line

@@ -1,9 +1,10 @@
 module NervousChase where
 
-
-
 import Euterpea
 import Lib
+
+-- Exercise in L-systems per Haskell School of Music
+-- Example: playDev 6 $ l2Music 15 40 sn
 
 
 data DetGrammar a = DetGrammar a
