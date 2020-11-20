@@ -20,39 +20,14 @@ import Euterpea
 import Lib
 
 
--- The composition:
-
--- Infinite version: 
-chorale :: InstrumentName -> Dur -> Music Pitch
-chorale player n =  instrument player $ bass n :=: tenor n :=: tenor2 n :=: solo n
-
--- Examples:
--- > playDev 2 $ chorale Bassoon
-
-
---- Construction of the chorale ---
-
-solo :: Dur -> Music Pitch
-solo n = cut n $ forever $ soloLine
-
-tenor ::  Dur -> Music Pitch
-tenor n = cut n $ forever $ tenorLine
-
-tenor2 ::  Dur -> Music Pitch
-tenor2 n = cut n $ forever $ tenorLine2
-
-bass ::  Dur -> Music Pitch
-bass n = cut n $ forever $ bass2 0
-
-
 -- BASS LINE
 
 bass3 = b1 :+: b2 :+: b3 :+: b4 :+: b1
 
 b1 = bass2 0 :+: rest wn
 b2 = transpose 5 $ bass2 2 :+: rest wn
-b3 = transpose 7 $ bass2 4 :+: rest wn
-b4 = transpose 5 $ bass2 2 :+: rest wn        
+b3 = retro $ transpose 7 $ bass2 4 :+: rest wn
+b4 = retro $ transpose 5 $ bass2 2 :+: rest wn        
 
 ---  :+: transpose 5 $ bass2 2 :+: bass2  0
 
@@ -65,24 +40,44 @@ bass1= line $ [d 1 wn, f 1 wn, a 1 wn,  g 1 1, f 1 qn, e 1 qn, d 1 qn, c 1 qn, e
 -- bassLine = line $ [bassNote 6, rest 1, bassNote' 3, rest 3, bassNote'' 3, rest 2, bassNote''' 4, rest 1 , bassNote 7, rest 4]
 
 
--- The tenor
-tenorLine :: Music Pitch
-tenorLine = line $ map (rescale (1/2)) [rest 2, tenorNote 8, rest 3
-                  , tenorNote' 4, tenorNote'' 5, rest 4]
 
-tenorNote = a 1
-tenorNote' = c 2
-tenorNote'' = d 2
+
+piece = offset 4 $ instrument Clarinet t2 :=: bass3
+piece2 = (rescale hn $ bass3) :=: sta 0.5 (offset 2 $ transpose 24  $ (rescale (hn) bass3))
+-- (instrument Marimba $ rescale hn $ mx) :=: 
+
+
+motif = concat [dmap en [f 3,  g 3], [a 3 qn], dmap en [g 3, f 3, e 3, f 3]
+                    , dmap qn [g 3, f 3, e 3, c 3], [d 3 hn]]
+
+mx = line (concat (prefixes motif))
+
+t4 = t3 :+: (transpose 7 $ invert t3) :+: (transpose (-5) $ retro t3) 
+t3b = (instrument Marimba t2 )  :=: (offset 4 $ transpose 12 $ instrument Xylophone t2)
+t3 = instrument Clarinet t2 :=: (offset 4 $ transpose 12 $ instrument Flute t2)
+t2 = t1 :+: rest qn :+: transpose 5 t1 :+: transpose 7 t1 :+: rest qn :+: transpose 5 t1  :+: transpose 2 t1
+t1 = t0 :+: rest qn :+: (transpose 2 $ invert t0)
+
+finalPiece =  rescale 0.8 $ (offset 4 $ rescale 1 $ t4) :=: bass3 
 
 -- The second tenor
-tenorLine2 :: Music Pitch
-tenorLine2 = rest 7 :+: f 1 4 :+: c 2 4
+t0 :: Music Pitch
+t0 = line $ concat [dmap en [d 3, e 3, f 3, c 4 , bf 3, g 3, a 3]]
 
--- The solo
-soloLine  :: Music Pitch
-soloLine = soloMotif' :+: transpose 7 soloMotif' :+: rest 1
+rhythm1 = [qn,  hn,  en,  en,  en,  en,  qn,  hn,  hn]  -- where the last qn should be a rest
+rhythm2 = [en, en, en, en, qn, qn]
+motif1 =  [d 3, a 3, g 3, f 3, e 3, f 3, a 3, g 3, e 3]
+motif2 =  [g 3, f 3, e 3, f 3, a 3, g 3]
+m1 = sta 0.95 $ line $ mApply motif1 rhythm1
+m2 = sta 0.95 $ line $ mApply motif2 rhythm2
 
-soloMotifA = line $ [a 2 1, d 3 1, c 4 2, f 4 hn, rest 2]
-soloMotif = line $ [a 2 1, d 3 1, c 3 2, f 3 2, e 3 4, rest 2]
-soloMotif' = rest 9 :+: soloMotif :+: transpose 3 soloMotif
+invertIntervals :: [Int] -> [Int]
+invertIntervals is = map (\x -> (-x)) is
 
+
+m3 tp = m1 :+: (transpose 3 $ mSeq tp m2) 
+m4 tp = m3 tp :+: (retro $ m3 (invertIntervals tp)) 
+m5 = instrument Clarinet $ m4 [0,2,5] :=: (transpose 19 $ offset 1 $ instrument Flute $ m4 [0,2,5])
+
+
+pt = perfTime 120

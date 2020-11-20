@@ -27,7 +27,7 @@ source-repository head
 
 library
   exposed-modules:
-      Chorale3
+      Duet
       Lib
       NervousChase
       SpaceInvasion

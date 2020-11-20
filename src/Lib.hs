@@ -49,8 +49,68 @@ rescale factor mp =
 perfTime :: Rational -> Music a -> Rational
 perfTime metronome x = dur x * (metronome / 60)
 
+pt = perfTime 120
+
+
 
 rit r = Modify (Phrase [Tmp $ Ritardando r])
 acc a = Modify (Phrase [Tmp $ Accelerando a])
 dim d = Modify (Phrase [Dyn $ Diminuendo d])
 cre c = Modify (Phrase [Dyn $ Crescendo c])
+sta s = Modify (Phrase [Art (Staccato s)])
+akk a = Modify (Phrase [Dyn $ Accent a])
+
+prefixes ::       [a] -> [[a]]
+prefixes []     = []
+prefixes (x:xs) = let f pf = x : pf
+                  in [x] : map f (prefixes xs)
+
+
+
+dmap :: Dur -> [Dur -> Music Pitch] -> [Music Pitch]
+dmap dur pitchOps = applyfuncs pitchOps dur
+
+
+applyfuncs :: [a -> b] -> a -> [b]
+applyfuncs fs a = 
+    case fs of
+        [] -> []
+        (f:fs) -> (f a):(applyfuncs fs a)
+
+
+--  > mApply [(2*), (3*)] [2, 3]
+--   [4,9]
+mApply :: [a -> b] -> [a] -> [b]
+mApply fs as = 
+    let 
+        ap (f,a) = f a
+     in 
+        map ap $ zip fs as  
+
+
+
+{-|
+   Make a sequence of out a given phrase with given intervals
+-}
+mSeq :: [Int] -> Music a -> Music a
+mSeq [] m = rest 0
+mSeq (i:is) m = (transpose i m) :+: (mSeq is m)
+
+unison, mi2, ma2, mi3, ma3, p4, tritone, p5, mi6, ma6, mi7, ma7, octave :: Int
+unison = 0
+mi2 = 1
+ma2 = 2
+mi3 = 3
+ma3 = 4
+p4 = 5
+tritone = 6
+p5 = 7
+mi6 = 8
+ma6 = 9
+mi7 = 10
+ma7 = 11
+octave = 12
+
+
+invertIntervals :: [Int] -> [Int]
+invertIntervals is = map (\x -> (-x)) is

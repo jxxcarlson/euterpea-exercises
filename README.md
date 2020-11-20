@@ -16,3 +16,5 @@ and Donya Quick.  Current status is:
 2. NervousChase.hs: based on L-systems, as in HSOM, ch. 13
 3. SpaceInvation.hs: I took [Donya Quick's code](https://github.com/Euterpea/Euterpea2-Examples/blob/master/NoteLevel/RandomMusic.lhs) as a starting point.  Uses Random walk.
 
+
+
