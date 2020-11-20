@@ -27,7 +27,7 @@ source-repository head
 
 library
   exposed-modules:
-      Chorale
+      Chorale3
       Lib
       NervousChase
       SpaceInvasion
